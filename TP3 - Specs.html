@@ -1,0 +1,345 @@
+<!DOCTYPE html> <html lang=fr-CA style><!--
+ Page saved with SingleFile 
+ url: https://ericbeaudry.uqam.ca/INF3105/tp3/ 
+ saved date: Tue Oct 21 2025 16:52:58 GMT-0400 (Eastern Daylight Time)
+--><meta charset=utf-8>
+<title>INF3105 / TP3 — Abres AVL</title>
+<meta name=author content="Éric Beaudry">
+<style>header{background-color:#0d57a1;padding:8px;color:white;font-size:110%}footer{padding:3px;margin-top:1em;color:white;background-color:#0d57a1}body{margin:0}div.contenu{padding:3px;margin:3px}h1{text-align:center;border-bottom:solid 1px;font-variant:small-caps}h2{text-align:left;border-top:dotted 2px gray;font-variant:small-caps}table{border-collapse:collapse;border:1px solid #000;vertical-align:top}td{border:1px solid #888;padding:2px;vertical-align:top;text-align:left}th{border:1px solid #666;padding:2px;text-align:left;vertical-align:top;background-color:lightgray}ul{margin-top:0px;padding-left:2em}header>div{margin:0;padding:0;display:inline-block}pre{padding:5px;background-color:#d7eef4;color:black;line-height:110%;border:1px solid #0d57a1;border-left:6px solid #0d57a1}h1{border:0}h1:not(.autres){counter-reset:H2}h2{counter-reset:H3}h3{counter-reset:H4}h2:before{content:counter(H2)". ";counter-increment:H2}h3:before{content:counter(H2)"."counter(H3)" ";counter-increment:H3}h4:before{content:counter(H2)"."counter(H3)"."counter(H4)" ";counter-increment:H4}code{background-color:#d7eef4}table.grilleevaluation tr td:nth-child(1){text-align:center;font-weight:bold}table.grilleevaluation tr td:nth-child(3){text-align:center}table.grilleevaluation tr th:nth-child(3){text-align:center}</style>
+<style>@keyframes spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}</style><meta name=referrer content=no-referrer><link type=image/x-icon rel="shortcut icon" href="data:image/vnd.microsoft.icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAD///8A7d/RANu/owDVtJMAvopXAKxqKQC4gEcApmAZAPn08ADn1MIAz6qEAMSVZgCydTgAoFUKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NCwcNDQ0NDQ0NDQ0NDQ0NBgABBw0NDQ0NDQ0NDQ0NDQ0DAAEHDQ0NDQ0NDQ0NBQYGBgIAAQcNDQ0NDQ0NBggAAAAAAAAJDQ0NDQ0NCwAAAwoKAQAIDA0NDQ0NCwAIBA0NCwAIDA0NDQ0NCwAIDA0NBgAIDA0NDQ0NDQIIDA0NDQ0CDA0NDQ0NDQ0NDA0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="><style>.sf-hidden{display:none!important}</style><link rel=canonical href=https://ericbeaudry.uqam.ca/INF3105/tp3/><meta http-equiv=content-security-policy content="default-src 'none'; font-src 'self' data:; img-src 'self' data:; style-src 'unsafe-inline'; media-src 'self' data:; script-src 'unsafe-inline' data:; object-src 'self' data:; frame-src 'self' data:;"></head>
+<body>
+<header>
+<div>
+<b>INF3105 — Structures de données et algorithmes</b>
+<br>
+Automne 2025
+</div>
+<div style=text-align:right;position:absolute;right:1em>
+UQAM
+<br>
+Département d'informatique
+</div>
+</header>
+<div class=contenu>
+<h1 align=center>Travail pratique #3 — Arbres AVL</h1>
+<div style=text-align:right>
+<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB3aWR0aD0iMTczLjA4NjYxIgogICBoZWlnaHQ9IjExMy4wODY2MiIKICAgaWQ9InN2ZzMxMTgiCiAgIHZlcnNpb249IjEuMSIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMC40OC40IHI5OTM5IgogICBzb2RpcG9kaTpkb2NuYW1lPSJOb3V2ZWF1IGRvY3VtZW50IDIiPgogIDxkZWZzCiAgICAgaWQ9ImRlZnMzMTIwIiAvPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0iYmFzZSIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMS4wIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSIzLjk1OTc5OCIKICAgICBpbmtzY2FwZTpjeD0iMTkuNTAzMjg3IgogICAgIGlua3NjYXBlOmN5PSIxOC4xMjUyMTMiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9InB4IgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9ImxheWVyMSIKICAgICBzaG93Z3JpZD0idHJ1ZSIKICAgICB1bml0cz0ibW0iCiAgICAgZml0LW1hcmdpbi1yaWdodD0iMSIKICAgICBmaXQtbWFyZ2luLXRvcD0iMSIKICAgICBmaXQtbWFyZ2luLWJvdHRvbT0iMSIKICAgICBmaXQtbWFyZ2luLWxlZnQ9IjEiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIxOTIwIgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9IjEwMDQiCiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjAiCiAgICAgaW5rc2NhcGU6d2luZG93LXk9IjI0IgogICAgIGlua3NjYXBlOndpbmRvdy1tYXhpbWl6ZWQ9IjEiPgogICAgPGlua3NjYXBlOmdyaWQKICAgICAgIHR5cGU9Inh5Z3JpZCIKICAgICAgIGlkPSJncmlkMzE3NyIKICAgICAgIGVtcHNwYWNpbmc9IjUiCiAgICAgICB2aXNpYmxlPSJ0cnVlIgogICAgICAgZW5hYmxlZD0idHJ1ZSIKICAgICAgIHNuYXB2aXNpYmxlZ3JpZGxpbmVzb25seT0idHJ1ZSIKICAgICAgIG9yaWdpbng9Ii0xMTYuMzEzODRweCIKICAgICAgIG9yaWdpbnk9Ii04OTcuNzI5NTlweCIgLz4KICA8L3NvZGlwb2RpOm5hbWVkdmlldz4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGEzMTIzIj4KICAgIDxyZGY6UkRGPgogICAgICA8Y2M6V29yawogICAgICAgICByZGY6YWJvdXQ9IiI+CiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICAgICAgPGRjOnR5cGUKICAgICAgICAgICByZGY6cmVzb3VyY2U9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS9TdGlsbEltYWdlIiAvPgogICAgICAgIDxkYzp0aXRsZT48L2RjOnRpdGxlPgogICAgICA8L2NjOldvcms+CiAgICA8L3JkZjpSREY+CiAgPC9tZXRhZGF0YT4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJDYWxxdWUgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiCiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTExNi4zMTM4NCwtNDEuNTQ1OTc5KSI+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MXB4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJNIDE5MC4yMjcyNSwxMzUuNTc2NDYgMTYwLjIyNzI2LDEwMC41NzY0NyIKICAgICAgIGlkPSJwYXRoNDkxMS05LTQtOC0xLTgtMC0zLTAtNC00LTktNy03LTctNC05LTMiCiAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAgc29kaXBvZGk6bm9kZXR5cGVzPSJjYyIgLz4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gMjcwLjIyNzI1LDEzMC41NzY0NiAyNDAuMjI3MjYsOTUuNTc2NDY2IgogICAgICAgaWQ9InBhdGg0OTExLTktNC04LTEtOC0wLTMtMC00LTQtOS03LTctNy0zLTAtMyIKICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjIiAvPgogICAgPHBhdGgKICAgICAgIHNvZGlwb2RpOnR5cGU9ImFyYyIKICAgICAgIHN0eWxlPSJmaWxsOiNkN2VlZjQ7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiM2NjY2NjY7c3Ryb2tlLXdpZHRoOjE7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLWRhc2hvZmZzZXQ6MCIKICAgICAgIGlkPSJwYXRoNDg3MC05LTQtMS0wLTktNy0yLTQtMC02LTUtMC0wLTYtOC05LTEtOCIKICAgICAgIHNvZGlwb2RpOmN4PSI0MCIKICAgICAgIHNvZGlwb2RpOmN5PSIzMi4zNjIxODMiCiAgICAgICBzb2RpcG9kaTpyeD0iMTUiCiAgICAgICBzb2RpcG9kaTpyeT0iMTUiCiAgICAgICBkPSJtIDU1LDMyLjM2MjE4MyBhIDE1LDE1IDAgMSAxIC0zMCwwIDE1LDE1IDAgMSAxIDMwLDAgeiIKICAgICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIzMC4zNTcxNCwxMDMuMjE0MjkpIiAvPgogICAgPHRleHQKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBzdHlsZT0iZm9udC1zaXplOjE4cHg7Zm9udC1zdHlsZTpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2xpbmUtaGVpZ2h0OjEyNSU7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO2ZvbnQtZmFtaWx5OlNhbnMiCiAgICAgICB4PSIyNzAuMzU3MTUiCiAgICAgICB5PSIxNDAuNTc2NDYiCiAgICAgICBpZD0idGV4dDQwNTYtMy05Ny0yLTEtNC02IgogICAgICAgc29kaXBvZGk6bGluZXNwYWNpbmc9IjEyNSUiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW40MDU4LTYtNC00LTQtNC0wIgogICAgICAgICB4PSIyNzAuMzU3MTUiCiAgICAgICAgIHk9IjE0MC41NzY0NiIKICAgICAgICAgc3R5bGU9InRleHQtYWxpZ246Y2VudGVyO3RleHQtYW5jaG9yOm1pZGRsZSI+NjwvdHNwYW4+PC90ZXh0PgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjFweDtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0ibSAxNjAsOTcuMzYyMTg2IDQwLC00MCIKICAgICAgIGlkPSJwYXRoNDkxMS05LTQtOC0xLTgtMC0zLTAtNC00LTktNy01LTEtNi0yLTUtNiIKICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjFweDtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAyNDAuMjI3MjUsOTUuNTc2NDU2IDIwMCw1Ny4zNjIxODYiCiAgICAgICBpZD0icGF0aDQ5MTEtOS00LTgtMS04LTAtMy0wLTQtNC05LTctNy03LTQtOSIKICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjIiAvPgogICAgPHBhdGgKICAgICAgIHNvZGlwb2RpOnR5cGU9ImFyYyIKICAgICAgIHN0eWxlPSJmaWxsOiNkN2VlZjQ7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiM2NjY2NjY7c3Ryb2tlLXdpZHRoOjE7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLWRhc2hvZmZzZXQ6MCIKICAgICAgIGlkPSJwYXRoNDg3MC05LTQtMS0wLTktNy0yLTQtMC02LTUtMC0wLTYtOC0wLTkiCiAgICAgICBzb2RpcG9kaTpjeD0iNDAiCiAgICAgICBzb2RpcG9kaTpjeT0iMzIuMzYyMTgzIgogICAgICAgc29kaXBvZGk6cng9IjE1IgogICAgICAgc29kaXBvZGk6cnk9IjE1IgogICAgICAgZD0ibSA1NSwzMi4zNjIxODMgYSAxNSwxNSAwIDEgMSAtMzAsMCAxNSwxNSAwIDEgMSAzMCwwIHoiCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMDAuMzU3MTUsNjUuNzE0Mjg2KSIgLz4KICAgIDx0ZXh0CiAgICAgICB4bWw6c3BhY2U9InByZXNlcnZlIgogICAgICAgc3R5bGU9ImZvbnQtc2l6ZToxOHB4O2ZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtsaW5lLWhlaWdodDoxMjUlO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtmb250LWZhbWlseTpTYW5zIgogICAgICAgeD0iMjQwLjM1NzE1IgogICAgICAgeT0iMTAzLjA3NjQ3IgogICAgICAgaWQ9InRleHQ0MDU2LTMtOTctMi0xOC05IgogICAgICAgc29kaXBvZGk6bGluZXNwYWNpbmc9IjEyNSUiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW40MDU4LTYtNC00LTAtMSIKICAgICAgICAgeD0iMjQwLjM1NzE1IgogICAgICAgICB5PSIxMDMuMDc2NDciCiAgICAgICAgIHN0eWxlPSJ0ZXh0LWFsaWduOmNlbnRlcjt0ZXh0LWFuY2hvcjptaWRkbGUiPjU8L3RzcGFuPjwvdGV4dD4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Im0gMTM1LjM1NzE0LDEzNS41NzY0NyAzMCwtMzUiCiAgICAgICBpZD0icGF0aDQ5MTEtOS00LTgtMS04LTAtMy0wLTQtNC05LTctNS0xLTYtMi00IgogICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2MiIC8+CiAgICA8cGF0aAogICAgICAgc29kaXBvZGk6dHlwZT0iYXJjIgogICAgICAgc3R5bGU9ImZpbGw6I2Q3ZWVmNDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzY2NjY2NjtzdHJva2Utd2lkdGg6MTtzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2UtZGFzaG9mZnNldDowIgogICAgICAgaWQ9InBhdGg0ODcwLTYtNi0yLTMtMy02LTgtNC02LTktMS0xLTgiCiAgICAgICBzb2RpcG9kaTpjeD0iNDAiCiAgICAgICBzb2RpcG9kaTpjeT0iMzIuMzYyMTgzIgogICAgICAgc29kaXBvZGk6cng9IjE1IgogICAgICAgc29kaXBvZGk6cnk9IjE1IgogICAgICAgZD0ibSA1NSwzMi4zNjIxODMgYSAxNSwxNSAwIDEgMSAtMzAsMCAxNSwxNSAwIDEgMSAzMCwwIHoiCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAuMzU3MTQsNjUuNzE0Mjg2KSIgLz4KICAgIDx0ZXh0CiAgICAgICB4bWw6c3BhY2U9InByZXNlcnZlIgogICAgICAgc3R5bGU9ImZvbnQtc2l6ZToxOHB4O2ZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtsaW5lLWhlaWdodDoxMjUlO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtmb250LWZhbWlseTpTYW5zIgogICAgICAgeD0iMTYwLjM1NzEzIgogICAgICAgeT0iMTAzLjA3NjQ3IgogICAgICAgaWQ9InRleHQ0MDU2LTEtMy01IgogICAgICAgc29kaXBvZGk6bGluZXNwYWNpbmc9IjEyNSUiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW40MDU4LTktMi02IgogICAgICAgICB4PSIxNjAuMzU3MTMiCiAgICAgICAgIHk9IjEwMy4wNzY0NyIKICAgICAgICAgc3R5bGU9InRleHQtYWxpZ246Y2VudGVyO3RleHQtYW5jaG9yOm1pZGRsZSI+MjwvdHNwYW4+PC90ZXh0PgogICAgPHBhdGgKICAgICAgIHNvZGlwb2RpOnR5cGU9ImFyYyIKICAgICAgIHN0eWxlPSJmaWxsOiNkN2VlZjQ7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiM2NjY2NjY7c3Ryb2tlLXdpZHRoOjE7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLWRhc2hvZmZzZXQ6MCIKICAgICAgIGlkPSJwYXRoNDg3MC05LTQtMS0wLTktNy0yLTQtMC02LTUtMC0wLTAtNy0zIgogICAgICAgc29kaXBvZGk6Y3g9IjQwIgogICAgICAgc29kaXBvZGk6Y3k9IjMyLjM2MjE4MyIKICAgICAgIHNvZGlwb2RpOnJ4PSIxNSIKICAgICAgIHNvZGlwb2RpOnJ5PSIxNSIKICAgICAgIGQ9Im0gNTUsMzIuMzYyMTgzIGEgMTUsMTUgMCAxIDEgLTMwLDAgMTUsMTUgMCAxIDEgMzAsMCB6IgogICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYwLjM1NzE1LDI4LjIxNDI4NikiIC8+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXNpemU6MThweDtmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7bGluZS1oZWlnaHQ6MTI1JTtsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7Zm9udC1mYW1pbHk6U2FucyIKICAgICAgIHg9IjIwMC4zNTcxNSIKICAgICAgIHk9IjY1LjU3NjQ2OSIKICAgICAgIGlkPSJ0ZXh0NDA1Ni0zLTMtNS05IgogICAgICAgc29kaXBvZGk6bGluZXNwYWNpbmc9IjEyNSUiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW40MDU4LTYtOS04LTIiCiAgICAgICAgIHg9IjIwMC4zNTcxNSIKICAgICAgICAgeT0iNjUuNTc2NDY5IgogICAgICAgICBzdHlsZT0idGV4dC1hbGlnbjpjZW50ZXI7dGV4dC1hbmNob3I6bWlkZGxlIj40PC90c3Bhbj48L3RleHQ+CiAgICA8cGF0aAogICAgICAgc29kaXBvZGk6dHlwZT0iYXJjIgogICAgICAgc3R5bGU9ImZpbGw6I2Q3ZWVmNDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzY2NjY2NjtzdHJva2Utd2lkdGg6MTtzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2UtZGFzaG9mZnNldDowIgogICAgICAgaWQ9InBhdGg0ODcwLTktNC0xLTAtOS03LTItNC0wLTYtNS0wLTAtNS0yLTk1LTctOCIKICAgICAgIHNvZGlwb2RpOmN4PSI0MCIKICAgICAgIHNvZGlwb2RpOmN5PSIzMi4zNjIxODMiCiAgICAgICBzb2RpcG9kaTpyeD0iMTUiCiAgICAgICBzb2RpcG9kaTpyeT0iMTUiCiAgICAgICBkPSJtIDU1LDMyLjM2MjE4MyBhIDE1LDE1IDAgMSAxIC0zMCwwIDE1LDE1IDAgMSAxIDMwLDAgeiIKICAgICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk1LjM1NzE0MywxMDMuMjE0MjkpIiAvPgogICAgPHRleHQKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBzdHlsZT0iZm9udC1zaXplOjE4cHg7Zm9udC1zdHlsZTpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2xpbmUtaGVpZ2h0OjEyNSU7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO2ZvbnQtZmFtaWx5OlNhbnMiCiAgICAgICB4PSIxMzUuMzU3MTUiCiAgICAgICB5PSIxNDAuNTc2NDYiCiAgICAgICBpZD0idGV4dDQwNTYtMy05LTA2LTAtNyIKICAgICAgIHNvZGlwb2RpOmxpbmVzcGFjaW5nPSIxMjUlIj48dHNwYW4KICAgICAgICAgc29kaXBvZGk6cm9sZT0ibGluZSIKICAgICAgICAgaWQ9InRzcGFuNDA1OC02LTUtOC0yLTk0IgogICAgICAgICB4PSIxMzUuMzU3MTUiCiAgICAgICAgIHk9IjE0MC41NzY0NiIKICAgICAgICAgc3R5bGU9InRleHQtYWxpZ246Y2VudGVyO3RleHQtYW5jaG9yOm1pZGRsZSI+MTwvdHNwYW4+PC90ZXh0PgogICAgPHBhdGgKICAgICAgIHNvZGlwb2RpOnR5cGU9ImFyYyIKICAgICAgIHN0eWxlPSJmaWxsOiNkN2VlZjQ7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiM2NjY2NjY7c3Ryb2tlLXdpZHRoOjE7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLWRhc2hvZmZzZXQ6MCIKICAgICAgIGlkPSJwYXRoNDg3MC05LTQtMS0wLTktNy0yLTQtMC02LTUtMC0wLTUtMi05NS03LTktOSIKICAgICAgIHNvZGlwb2RpOmN4PSI0MCIKICAgICAgIHNvZGlwb2RpOmN5PSIzMi4zNjIxODMiCiAgICAgICBzb2RpcG9kaTpyeD0iMTUiCiAgICAgICBzb2RpcG9kaTpyeT0iMTUiCiAgICAgICBkPSJtIDU1LDMyLjM2MjE4MyBhIDE1LDE1IDAgMSAxIC0zMCwwIDE1LDE1IDAgMSAxIDMwLDAgeiIKICAgICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1MC4zNTcxNCwxMDMuMjE0MjkpIiAvPgogICAgPHRleHQKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBzdHlsZT0iZm9udC1zaXplOjE4cHg7Zm9udC1zdHlsZTpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2xpbmUtaGVpZ2h0OjEyNSU7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO2ZvbnQtZmFtaWx5OlNhbnMiCiAgICAgICB4PSIxOTAuMzU3MTUiCiAgICAgICB5PSIxNDAuNTc2NDYiCiAgICAgICBpZD0idGV4dDQwNTYtMy05LTA2LTAtMC0yIgogICAgICAgc29kaXBvZGk6bGluZXNwYWNpbmc9IjEyNSUiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW40MDU4LTYtNS04LTItOS04IgogICAgICAgICB4PSIxOTAuMzU3MTUiCiAgICAgICAgIHk9IjE0MC41NzY0NiIKICAgICAgICAgc3R5bGU9InRleHQtYWxpZ246Y2VudGVyO3RleHQtYW5jaG9yOm1pZGRsZSI+MzwvdHNwYW4+PC90ZXh0PgogIDwvZz4KPC9zdmc+Cg==" style=height:8em>
+</div>
+<h2>Objectifs</h2>
+<ul>
+ <li>Pratiquer l'encapsulation et concevoir des types abstraits de données.</li>
+ <li>Implémenter une structure de données ArbreAVL en C++.</li>
+ <li>Gérer la mémoire.</li>
+ <li>Se préoccuper de l'efficacité.</li>
+</ul>
+<h2>Tâches</h2>
+<p>
+Le TP3 consiste à :
+</p>
+<ol>
+<li>
+terminer l'implémentation de la classe générique <code>ArbreAVL</code> (fichier <tt>arbreavl.h</tt>) amorcée aux <a href=https://ericbeaudry.uqam.ca/INF3105/lab6/>Lab6</a> et <a href=https://ericbeaudry.uqam.ca/INF3105/lab7/>Lab7</a>;
+</li>
+<li>préparer des tests (fichier <tt>testtp3.cpp</tt>) pour vérifier et évaluer la classe générique <code>ArbreAVL</code>.</li>
+</ol>
+<p></p>
+<p>
+Deux fichiers de départ <tt>arbreavl.h</tt> et <tt>testtp3.h</tt> sont fournis dans <a href=https://ericbeaudry.uqam.ca/INF3105/tp3/tp3.zip>tp3.zip</a>.
+</p>
+<h3>Interface publique</h3>
+<p>
+Votre implémentation finale doit offrir l'interface publique suivante.
+Autrement dit, tous les constructeurs, fonctions et opérateurs suivants doivent être implémentés.
+</p>
+<pre>template &lt;class T&gt;
+class ArbreAVL{
+  public:
+// Constructeurs
+    ArbreAVL();
+    ArbreAVL(const ArbreAVL&amp;);
+
+// Fonctions de base faites dans les labs 6-7 :
+    bool vide() const;
+    bool contient(const T&amp;) const;
+    void inserer(const T&amp;);
+    void vider();
+
+<b>// Fonctionnalités spécifiques du TP3 :
+    int             taille() const; // retourne le nombre d'éléments
+    
+    ArbreAVL&lt;T&gt;&amp;    operator = (const ArbreAVL&lt;T&gt;&amp; autre);
+
+    bool            operator == (const ArbreAVL&lt;T&gt;&amp; autre) const;
+    
+    ArbreAVL&lt;T&gt;&amp;    operator += (const ArbreAVL&lt;T&gt;&amp; autre); // ajoute tous les éléments dans autre
+    ArbreAVL&lt;T&gt;     operator +  (const ArbreAVL&lt;T&gt;&amp; autre) const; // retourne l'union
+    
+    ArbreAVL&lt;T&gt;&amp;    operator -= (const ArbreAVL&lt;T&gt;&amp; autre); // retire tous les éléments dans autre
+    ArbreAVL&lt;T&gt;     operator -  (const ArbreAVL&lt;T&gt;&amp; autre) const; // retourne la différence*
+</b>
+
+private:
+  ...
+};
+</pre>
+<p>
+Vous pouvez ajouter d'autres fonctionnalités que celles listées ci-haut.
+Cependant, toutes les fonctionnalités listées ci-haut doivent être présentes,
+sinon les tests automatiques échoueront.
+À noter que plusieurs fonctionnalités des Lab6 et Lab7 ne sont pas demandées ci-haut, comme la fonction <code>enlever</code> et les itérateurs.
+Certaines d'elles pourraient être utiles pour implémenter les fonctionnalités demandées.
+Libre à vous de conserver ou de retirer les fonctionnalités des Lab6 et Lab7 ne sont pas demandées au TP3.
+</p>
+<p>
+Vous pouvez modifier la représentation autant que vous le souhaitez.
+L'important est de respecter l'interface publique spécifiée ci-haut.
+</p>
+<p>
+* L'opérateur <code>-</code> doit effectuer une différente ensembliste.
+En mathématique, on note la différence ensembliste avec une barre \ (<i>backslash</i>) et on la définie comme suit:
+A \ B = { x ∈ A | x ∉ B }.
+</p>
+<p>
+Il est <b>possible</b> d'implémenter les opérateurs <code>-</code> et <code>-=</code> sans utiliser la fonction <code>enlever</code>.
+Indice : possible n'implique pas que ce soit une solution «parfaite»!
+</p>
+<h3>Tests</h3>
+<p>
+Contrairement au TP1, très peu de nouveaux tests sont fournis.
+Pour commencer, il est recommandé de réussir tous les tests pertinents des Lab6 et Lab7.
+</p>
+<p>
+Au TP3, <b>vous devez programmer des tests dans le programme <tt>testtp3.cpp</tt></b> pour vérifier les nouvelles fonctionnalités du TP3.
+La fonction <code>main</code> de <tt>testtp3.cpp</tt> doit retourner <b>0</b> si et seulement si aucune erreur n'a été détectée.
+Dès qu'au moins une erreur est détecté, ce programme doit retourner une valeur supérieure ou égale à 1.
+Il est recommandé de retourner le nombre de types d'erreurs détectées.
+En cas d'erreurs, votre programme doit afficher des messages permettant d'amorcer un diagnostique des erreurs détectées.
+</p>
+<p>
+Votre programme <tt>testtp3.cpp</tt> doit aussi évaluer l'efficacité temporelle des opérations de <code>ArbreAVL</code>.
+Autrement dit, vous devez concevoir une ou plusieurs fonctions permettant de détecter des implémentations inefficaces de <code>ArbreAVL</code>.
+Le temps d'exécution sera mesuré en nombre d'opérations ou avec la commande <code>time</code>.
+Une implémentation est réputé inefficace lorsqu'un test prend significativement plus de temps par rapport à avec une implémentation efficace.
+</p>
+<h4>Contraintes</h4>
+<ol>
+<li>
+La taille de votre programme ne doit pas dépasser 1000 lignes, 3000 mots et 20000 caractères.
+La taille sera mesurée avec la commande <tt>wc</tt>.
+</li>
+<li>
+Le temps d'exécution de votre programme sera limité à au moins 120 secondes (<tt>ulimit -t 120</tt>).
+Visez un temps d'exécution de 5-10 maximum secondes avec une implémentation efficace de <code>ArbreAVL</code> et sur une machine de référence (ex.: serveur <tt>java.ens.uqam.ca</tt>).
+</li>
+<li>La mémoire sera limitée à 2 Go (<tt>ulimit -v 2097152</tt>).
+Cette limite doit être largement suffisante pour tester une implémentation correcte et sans fuite de mémoire.
+</li>
+</ol>
+<h3>Perfection</h3>
+<p>
+Un peu comme pour le TP1,
+votre implémentation <code>ArbreAVL</code> doit viser la perfection.
+Lorsque vous avez différents choix possibles, au niveau de la représentation ou des algorithmes,
+vous devez prendre les meilleurs choix possibles.
+Si des compromis sont requis, vous devez prioriser, dans l'ordre, les qualités suivantes:
+le fonctionnement correct, l'efficacité temporelle, l'efficacité mémoire et simplicité du code.
+</p>
+<h3>Meilleures implémentations possibles</h3>
+<p>
+À titre d'indices, le tableau suivant montre les complexités atteignables.
+</p>
+<table>
+<tbody><tr><th>Opération<th>Complexité de la meilleure implémentation possible</tr>
+<tr>
+<td><code>taille()</code><td>O(1)</td>
+</tr>
+<tr>
+<td><code>operator=</code><td>O(n)</td>
+</tr>
+<tr>
+<td><code>operator==</code><td>O(n) où n est la taille du plus petit arbre</td>
+</tr>
+<tr>
+<td><code>operator+=</code><td>O(min(n, k log n)) où n est la taille de l'arbre courant et k la taille de l'autre arbre</td>
+</tr>
+<tr>
+<td><code>operator+</code><td>O(n) où n est la taille du plan grand arbre</td>
+</tr>
+<tr>
+<td><code>operator-=</code><td><i>(laissé en exercice)</i></td>
+</tr>
+<tr>
+<td><code>operator-</code><td><i>(laissé en exercice)</i></td>
+</tr>
+</table>
+<h2>Contraintes</h2>
+<h3>Bibliothèques permises</h3>
+<p>
+L'objectif du TP3 est d'implémenter notre propre classe générique <tt>ArbreAVL</tt>.
+Ainsi, l'utilisation des conteneurs de la bibliothèque standard de C++ (ex.: <tt>std::set</tt> ou <tt>std::map</tt>).
+</p>
+<h3>Environnement de développement</h3>
+<p>
+...
+</p>
+<h2>Remise</h2>
+<p>
+<b>Tous les membres</b> de l'équipe doivent:
+</p>
+<ul>
+<li>remettre un fichier <tt>tp3.zip</tt> contenant <tt>arbreavl.h</tt>, <tt>testtp3.cpp</tt> 
+et tous les autres fichiers source requis (ex.: <tt>pile.h</tt> si vous l'utilisez)
+via <a href=https://ericbeaudry.uqam.ca/INF3105/dyn/remise/TP3>le formulaire de remise du TP3</a>
+</li>
+</ul>
+<p>
+<b>au plus tard le dimanche 2 novembre 2025 à 23h59m59s</b>.
+</p>
+<p>
+Vous pouvez soumettre votre TP autant de fois que vous voulez.
+Seule la dernière soumission sera considérée.
+</p>
+<h2>Évaluation</h2>
+<p>
+Ce travail pratique est noté sur 100 et vaut 10% de la note finale.
+</p>
+<h3>Grille de correction</h3>
+<table class=grilleevaluation cellpadding=2 cellspacing=1 border=1>
+ <tbody>
+ <tr>
+ <th><b>Critère</b></th>
+ <th><b>Description</b></th>
+ <th><b>Points</b></th>
+ </tr>
+ <tr valign=top>
+ <td>A.</td>
+ <td><b>Respect des directives pour la remise</b>
+ <ul>
+ <li>Fichiers source uniquement. Aucun fichier intermédiaire (.o, ...) et exécutable.
+ <li>Remise par le formulaire Web.
+ Pas de remise par courriel.</li>
+ <li>Compilable sans modification.</li>
+ <li>Exécutable sans modification.</li>
+ </ul>
+ </td>
+ <td>10</td>
+ </tr>
+ 
+ <tr valign=top>
+ <td>B.</td>
+ <td><b>Fonctionnement correct</b><br>
+ 20 points: tests des fonctions <code>inserer</code>, <code>contient</code>, <code>vide</code> et <code>vider</code>.
+ Les tests nécessitant des fonctions non demandées au TP3 seront exclus ou adaptés (ex.: la fonction <code>hauteur</code> n'est pas demandée).
+ <br><br>
+ 25 points: tests des fonctionnalités spécifiques au TP3:
+ <ul>
+ <li><code>operator =</code></li>
+ <li><code>operator ==</code></li>
+ <li><code>operator +=</code></li>
+ <li><code>operator +</code></li>
+ <li><code>operator -=</code></li>
+ <li><code>operator -</code></li>
+ </ul>
+ <br>
+ </td>
+ <td>45</td>
+ </tr>
+ 
+ 
+ <tr valign=top>
+ <td>C.</td>
+ <td><b>Capacité de détection de <tt>testtp3.cpp</tt></b><br>
+ Votre programme sera compilé avec quelques implémentations erronées et/ou inefficaces de la classe <code>ArbreAVL</code> et celles des autres étudiants.
+ <br>
+ 10 points: proportionnel au nombre de cas bien détectés.
+ L'équipe qui détectera le plus d'implémentations erronées ou inefficaces aura 15 points.
+ L'équipe qui aura 
+ <br>
+ 5 points: justesse et pertinence des messages d'erreur affichés. 
+ </td>
+ <td>15</td>
+ </tr>
+ 
+ 
+ <tr valign=top>
+ <td>D.</td>
+ <td><b>Gestion de la mémoire correcte</b><br>
+ La mémoire est libérée correctement (avec <code>delete</code>).
+ Utilisation raisonnable de la mémoire (pas de gaspillage déraisonnable).
+ <br>
+ </td>
+ <td>10</td>
+ </tr>
+ <tr valign=top>
+ <td>E.</td>
+ <td><b>Efficacité des fonctionalités spécifiques au TP3</b><br>
+ Notée en en fonction du temps CPU requis quelques programmes tests d'efficacité.
+ <br>
+ Pour chaque test:
+ <ul>
+ <li>l'équipe obtenant le plus petit temps aura tous les points;</li>
+ <li>l'équipe obtenant le plus temps médian aura au moins 70% des points;</li>
+ <li>ne pas être pire que le double du temps médian garantit au moins 50% des points.</li>
+ </ul>
+ <td>20</td>
+ </tr>
+ <tr bgcolor=#eeffcc valign=top>
+ <th><p></p></th>
+ <th style=text-align:right>Total</th>
+ <th>100</th>
+ </tr>
+</table>
+<br><br>
+</div>
+<footer>
+<div align=center>© Éric Beaudry. Toute reproduction interdite sans permission explicite.</div>
+</footer>
+<div id=aiFabShadowRoot style=opacity:1><template shadowrootmode=open><style class=sf-hidden>.acrobat-button-container{position:fixed;right:0;bottom:36px;z-index:2147483646;visibility:visible!important;pointer-events:all;opacity:1;display:flex;align-items:center;transition:opacity 0.3s ease-in-out}.acrobat-button{position:relative;background:white;display:flex;align-items:center;pointer-events:all;touch-action:none;box-shadow:0px 2px 8px 0px #00000029;height:34px;width:34px;border:1px solid transparent;background-clip:padding-box,border-box;background-origin:border-box;background-image:linear-gradient(white,white),linear-gradient(95.85deg,#D73220 0%,#D92361 33%,#7155FA 100%);border-radius:18px;justify-content:right;margin-right:var(--fab-margin-right,28px);overflow:hidden}.acrobat-button-container-transparent{opacity:0.4!important;transition:opacity 0.3s ease-in-out}.acrobat-button-container-transparent:hover,.acrobat-button-container-transparent:focus,.acrobat-button-container-transparent:active{opacity:1}.acrobat-button>svg{flex-shrink:0;margin:4px 5px 5px 5px;width:22px;height:22px;pointer-events:none;fill:#b40000}.acrobat-button:has(.close-btn.open),.expand-acrobat-button{width:64px}.disabled{background:#B1B1B1}.tooltip-text{width:160px;visibility:hidden;opacity:0;background-color:#FFFFFF;color:#292929;border-radius:7px;padding:4px 1px 5px 9px;position:absolute;z-index:1;right:100%;top:50%;transform:translateY(-50%);margin-right:10px;transition:opacity 0.3s,visibility 0s linear 2s;font-size:12px;line-height:15px;font-family:"adobe-clean",Adobe Clean,sans-serif;filter:drop-shadow(0px 1px 6px rgba(0,0,0,0.12))}.tooltip-text::after{content:"";position:absolute;top:50%;left:100%;transform:translateY(-50%);border-width:6px;border-style:solid;border-color:transparent transparent transparent #fff}.show-tooltip{visibility:visible;opacity:1;line-height:1.5;font-family:"adobe-clean",Adobe Clean,sans-serif;transition:opacity 0.3s;transition-delay:500ms}.close-btn{position:relative;display:none;align-items:center;justify-content:center}.close-btn svg{fill:#464646}.close-btn.showCloseButton{opacity:1;display:flex;justify-content:center;width:24px;height:24px;padding:2px}.fab-view-settings-dialog{display:none;position:absolute;bottom:40px;z-index:1}.close-btn:hover{background:#E6E6E6;border-radius:50%;cursor:pointer}.fab-view-settings-dialog.showDialog{display:block}.close-btn .burger-icon{display:inline;margin-bottom:2px}.close-btn .close-icon{display:none}.close-btn.open .burger-icon{display:none}.close-btn.open .close-icon{display:inline}.tooltip-text .tooltip-text-content{font-weight:bold}.tooltip-text .tooltip-sub-text-text{font-style:italic;font-size:11px}.icon-iframe{border:none;width:33px;height:34px;background:transparent;pointer-events:all;flex-shrink:0}.draggable-handle{display:none;position:absolute;right:var(--drag-handle-right,12px);cursor:grab}.draggable-handle-visible{display:flex}</style>
+<div class=acrobat-button-container style=--fab-margin-right:22px;--drag-handle-right:6px>
+ <div class=acrobat-button role=button>
+ <div class="close-btn sf-hidden" role=button aria-label="Show Acrobat AI FAB View Settings">
+ <svg class=close-icon width=14 height=14 viewBox="0 0 14 14" fill=none xmlns=http://www.w3.org/2000/svg>
+ <mask id=mask0_8552_7892 style=mask-type:alpha maskUnits=userSpaceOnUse x=0 y=0 width=14 height=14>
+ <path d="M7.82482 7.00034L10.6374 4.18778C10.7893 4.03592 10.7893 3.78969 10.6374 3.63783L10.3625 3.36292C10.2106 3.21106 9.96446 3.21106 9.81255 3.36292L6.99995 6.17548L4.18734 3.36292C4.03543 3.21106 3.78933 3.21106 3.63743 3.36292L3.36247 3.63783C3.21056 3.78969 3.21056 4.03592 3.36247 4.18778L6.17507 7.00034L3.36247 9.81295C3.21056 9.96481 3.21056 10.2111 3.36247 10.3629L3.63743 10.6378C3.78933 10.7897 4.03543 10.7897 4.18734 10.6378L6.99995 7.82526L9.81255 10.6378C9.96446 10.7897 10.2106 10.7897 10.3625 10.6378L10.6374 10.3629C10.7893 10.2111 10.7893 9.96481 10.6374 9.81295L7.82482 7.00034Z" fill=#222222></path>
+ </mask>
+ <g mask=url(#mask0_8552_7892)>
+ <rect width=14 height=14></rect>
+ </g>
+ </svg>
+ <svg class=burger-icon width=21 height=17 viewBox="0 0 21 17" fill=none xmlns=http://www.w3.org/2000/svg>
+ <mask id=mask0_12188_28876 style=mask-type:alpha maskUnits=userSpaceOnUse x=3 y=3 width=15 height=14>
+ <path d="M15.1285 12.8008H6.37852C6.08867 12.8008 5.85352 13.0359 5.85352 13.3258C5.85352 13.6156 6.08867 13.8508 6.37852 13.8508H15.1285C15.4184 13.8508 15.6535 13.6156 15.6535 13.3258C15.6535 13.0359 15.4184 12.8008 15.1285 12.8008Z" fill=#292929></path>
+ <path d="M6.37852 6.85078H15.1285C15.4184 6.85078 15.6535 6.61562 15.6535 6.32578C15.6535 6.03594 15.4184 5.80078 15.1285 5.80078H6.37852C6.08867 5.80078 5.85352 6.03594 5.85352 6.32578C5.85352 6.61562 6.08867 6.85078 6.37852 6.85078Z" fill=#292929></path>
+ <path d="M15.1285 9.30078H6.37852C6.08867 9.30078 5.85352 9.53594 5.85352 9.82578C5.85352 10.1156 6.08867 10.3508 6.37852 10.3508H15.1285C15.4184 10.3508 15.6535 10.1156 15.6535 9.82578C15.6535 9.53594 15.4184 9.30078 15.1285 9.30078Z" fill=#292929></path>
+ </mask>
+ <g mask=url(#mask0_12188_28876)>
+ <rect x=3.75391 y=3 width=14 height=14 fill=#464646></rect>
+ </g>
+ </svg>
+ </div>
+ <iframe id=icon-iframe class=icon-iframe sandbox="allow-popups allow-top-navigation-by-user-activation" srcdoc="<!DOCTYPE html> <html><meta charset=utf-8>
+<style>html{height:100%;width:100%}body{margin:0;padding:0;background:transparent;overflow:hidden;height:100%;width:100%;cursor:pointer;pointer-events:all}svg{padding:5px 5px 5px 6px}</style>
+<meta name=referrer content=no-referrer><meta http-equiv=content-security-policy content=&quot;default-src 'none'; font-src 'self' data:; img-src 'self' data:; style-src 'unsafe-inline'; media-src 'self' data:; script-src 'unsafe-inline' data:; object-src 'self' data:; frame-src 'self' data:;&quot;></head>
+<body>
+ <svg id=ImportedIcons xmlns=http://www.w3.org/2000/svg width=22 height=22 viewBox=&quot;0 0 22 22&quot;>
+ <path d=m6.21661,16.39534c-1.35034,2.23499-2.67933,3.64758-3.45616,3.64758-.12795.00539-.25276-.04056-.34667-.12762-.14818-.12483-.21629-.32065-.17758-.5105.14764-.80079,1.68628-1.95576,3.98041-3.00946Zm6.49075-3.19656c-.57993.12528-1.1792.27056-1.78689.43544-.4366.11893-.87951.24862-1.32255.38729.23541-.4949.4515-.98554.6398-1.452.24831-.6159.48156-1.232.69564-1.83456.18831.30354.38304.59839.58195.88207.39375.56092.81787,1.09736,1.19205,1.58176Zm-2.99822-10.63684c.08814-.18001.26644-.29855.46653-.31016.51149,0,.62276.63358.62276,1.1638-.06787,1.25011-.29293,2.48669-.66988,3.68055-.85816-2.33642-.73831-3.97319-.41942-4.53419h.00001Zm9.60883,12.20974c-.13359.4402-.56725.71808-1.023.6555-.15594-.00061-.3112-.02054-.46224-.05933-1.07834-.28263-2.07953-.80363-2.92976-1.5246.71719-.11267,1.44198-.17001,2.16797-.17149.48402-.00813.96771.03017,1.44442.11438.43447.09244.92449.33873.80261.98554Zm1.45515-1.0537c-1.01837-.83309-2.33117-1.21735-3.63802-1.06487-.98482.00983-1.96732.09739-2.93836.26187-.62354-.62512-1.19003-1.30467-1.69272-2.03054-.38314-.54455-.73672-1.10931-1.05923-1.69182.54287-1.57384.85986-3.2167.94151-4.87953,0-1.49369-.57564-3.09087-2.19132-3.09087-.56296.01952-1.07528.33036-1.35261.82066-.68906,1.2165-.41298,3.72002.68705,6.26756-.38306,1.17041-.80046,2.31007-1.31196,3.57265-.43687,1.08123-.93191,2.13803-1.48293,3.16579-1.64775.68213-5.15115,2.33642-5.48494,4.16456-.10306.53569.0783,1.08658.47942,1.45629.39145.35044.90217.53779,1.42737.5236,2.10998,0,4.21366-3.003,5.63044-5.58789.80461-.2816,1.62641-.53671,2.44391-.759.8967-.24407,1.76345-.44427,2.58082-.594,1.39014,1.39224,3.25004,2.21523,5.21531,2.30773,1.36751,0,1.87887-.60942,2.06516-1.122.20733-.5893.08589-1.24438-.3189-1.72019Z fill=&quot;var(--iconRed, #d31510)&quot; fill-rule=evenodd></path>
+ </svg>
+ "></iframe>
+ </div>
+ <div class="fab-view-settings-dialog sf-hidden"></div>
+ <div class=tooltip-text>
+ <span id=tooltipTextEnabled class="translate tooltip-text-content">Get summaries and key insights using AI Assistant</span>
+ <span id=tooltipTextSubText class="translate tooltip-sub-text-text">powered by Adobe Acrobat</span>
+ </div>
+ <div class="draggable-handle sf-hidden">
+ <svg width=14 height=15 viewBox="0 0 14 15" fill=none xmlns=http://www.w3.org/2000/svg>
+ <path d="M4.60039 13.0699C5.26313 13.0699 5.80039 12.5327 5.80039 11.8699C5.80039 11.2072 5.26313 10.6699 4.60039 10.6699C3.93765 10.6699 3.40039 11.2072 3.40039 11.8699C3.40039 12.5327 3.93765 13.0699 4.60039 13.0699Z" fill=#292929></path>
+ <path d="M4.60039 8.27109C5.26313 8.27109 5.80039 7.73384 5.80039 7.07109C5.80039 6.40835 5.26313 5.87109 4.60039 5.87109C3.93765 5.87109 3.40039 6.40835 3.40039 7.07109C3.40039 7.73384 3.93765 8.27109 4.60039 8.27109Z" fill=#292929></path>
+ <path d="M4.60039 3.47031C5.26313 3.47031 5.80039 2.93305 5.80039 2.27031C5.80039 1.60757 5.26313 1.07031 4.60039 1.07031C3.93765 1.07031 3.40039 1.60757 3.40039 2.27031C3.40039 2.93305 3.93765 3.47031 4.60039 3.47031Z" fill=#292929></path>
+ <path d="M9.4002 13.0699C10.0629 13.0699 10.6002 12.5327 10.6002 11.8699C10.6002 11.2072 10.0629 10.6699 9.4002 10.6699C8.73745 10.6699 8.2002 11.2072 8.2002 11.8699C8.2002 12.5327 8.73745 13.0699 9.4002 13.0699Z" fill=#292929></path>
+ <path d="M9.4002 8.27109C10.0629 8.27109 10.6002 7.73384 10.6002 7.07109C10.6002 6.40835 10.0629 5.87109 9.4002 5.87109C8.73745 5.87109 8.2002 6.40835 8.2002 7.07109C8.2002 7.73384 8.73745 8.27109 9.4002 8.27109Z" fill=#292929></path>
+ <path d="M9.4002 3.47031C10.0629 3.47031 10.6002 2.93305 10.6002 2.27031C10.6002 1.60757 10.0629 1.07031 9.4002 1.07031C8.73745 1.07031 8.2002 1.60757 8.2002 2.27031C8.2002 2.93305 8.73745 3.47031 9.4002 3.47031Z" fill=#292929></path>
+ </svg>
+ </div>
+</div>
+</template></div><script data-template-shadow-root>(()=>{document.currentScript.remove();processNode(document);function processNode(node){node.querySelectorAll("template[shadowrootmode]").forEach(element=>{let shadowRoot = element.parentElement.shadowRoot;if (!shadowRoot) {try {shadowRoot=element.parentElement.attachShadow({mode:element.getAttribute("shadowrootmode"),delegatesFocus:element.getAttribute("shadowrootdelegatesfocus")!=null,clonable:element.getAttribute("shadowrootclonable")!=null,serializable:element.getAttribute("shadowrootserializable")!=null});shadowRoot.innerHTML=element.innerHTML;element.remove()} catch (error) {} if (shadowRoot) {processNode(shadowRoot)}}})}})()</script>

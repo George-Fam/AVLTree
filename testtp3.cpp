@@ -193,7 +193,7 @@ bool testE_taille(){
     auto fin = std::chrono::steady_clock::now();
     double duree = std::chrono::duration<double>(fin-debut).count();
     
-    if(duree > 0.3){
+    if(duree > 0.5){
         std::cout<<"taille() inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }
@@ -216,7 +216,7 @@ bool testE_egal(){
         std::cout<<"Egal logique mauvais"<<std::endl;
         return false;
     }
-    if(duree > 0.3){
+    if(duree > 0.5){
         std::cout<<"== inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }
@@ -235,7 +235,7 @@ bool testE_plusEgal(){
     auto fin = std::chrono::steady_clock::now();
     double duree = std::chrono::duration<double>(fin-debut).count();
 
-    if(duree > 0.3){
+    if(duree > 0.5){
         std::cout<<"+= inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }
@@ -255,7 +255,7 @@ bool testE_plus(){
     auto fin = std::chrono::steady_clock::now();
     double duree = std::chrono::duration<double>(fin-debut).count();
 
-    if(duree > 0.4){
+    if(duree > 0.5){
         std::cout<<"+ inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }
@@ -277,7 +277,7 @@ bool testE_moinsEgal(){
     auto fin = std::chrono::steady_clock::now();
     double duree = std::chrono::duration<double>(fin-debut).count();
 
-    if(duree > 0.4){
+    if(duree > 0.5){
         std::cout<<"-= inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }

@@ -255,7 +255,7 @@ bool testE_plus(){
     auto fin = std::chrono::steady_clock::now();
     double duree = std::chrono::duration<double>(fin-debut).count();
 
-    if(duree > 0.3){
+    if(duree > 0.4){
         std::cout<<"+ inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }

@@ -184,7 +184,7 @@ bool test09_copie(){
 }
 bool testE_taille(){
     ArbreAVL<int> a;
-    const int n = 200000;
+    const int n = 2000000;
     for(int i=0; i<n;i++) a.inserer(i);
     
     auto debut = std::chrono::steady_clock::now();
@@ -201,7 +201,7 @@ bool testE_taille(){
 }
 bool testE_egal(){
     ArbreAVL<int> a,b;
-    const int n = 150000;
+    const int n = 1500000;
     for(int i=0;i<n;i++){
         a.inserer(i);
         b.inserer(i);
@@ -224,7 +224,7 @@ bool testE_egal(){
 }
 bool testE_plusEgal(){
     ArbreAVL<int> a,b;
-    const int n = 150000;
+    const int n = 1500000;
     for(int i=0;i<n;i++){
         a.inserer(2*i);
         b.inserer(2*i+1);
@@ -244,7 +244,7 @@ bool testE_plusEgal(){
 
 bool testE_plus(){
     ArbreAVL<int> a,b;
-    const int n = 150000;
+    const int n = 1500000;
     for(int i=0;i<n;i++){
         a.inserer(i);
         b.inserer(i+n);
@@ -264,7 +264,7 @@ bool testE_plus(){
 
 bool testE_moinsEgal(){
     ArbreAVL<int> a,b;
-    const int n = 150000;
+    const int n = 1500000;
     for(int i=0;i<n;i++){
         a.inserer(i);
         b.inserer(i+n);
@@ -277,7 +277,7 @@ bool testE_moinsEgal(){
     auto fin = std::chrono::steady_clock::now();
     double duree = std::chrono::duration<double>(fin-debut).count();
 
-    if(duree > 0.3){
+    if(duree > 0.4){
         std::cout<<"-= inefficace: "<<duree<<" secondes"<<std::endl;
         return false;
     }

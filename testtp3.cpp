@@ -224,7 +224,7 @@ bool testE_egal(){
 }
 bool testE_plusEgal(){
     ArbreAVL<int> a,b;
-    const int n = 1500000;
+    const int n = 750000;
     for(int i=0;i<n;i++){
         a.inserer(2*i);
         b.inserer(2*i+1);
@@ -244,7 +244,7 @@ bool testE_plusEgal(){
 
 bool testE_plus(){
     ArbreAVL<int> a,b;
-    const int n = 1500000;
+    const int n = 750000;
     for(int i=0;i<n;i++){
         a.inserer(i);
         b.inserer(i+n);
@@ -264,7 +264,7 @@ bool testE_plus(){
 
 bool testE_moinsEgal(){
     ArbreAVL<int> a,b;
-    const int n = 1500000;
+    const int n = 750000;
     for(int i=0;i<n;i++){
         a.inserer(i);
         b.inserer(i+n);

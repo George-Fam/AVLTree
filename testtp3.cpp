@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <ostream>
 #include "arbreavl.h"
 
 void test00_compilation(){
@@ -181,6 +182,107 @@ bool test09_copie(){
     }
     return true;
 }
+bool testE_taille(){
+    ArbreAVL<int> a;
+    const int n = 200000;
+    for(int i=0; i<n;i++) a.inserer(i);
+    
+    auto debut = std::chrono::steady_clock::now();
+    long long somme = 0;
+    for(int i=0; i<n;i++) somme+=a.taille();
+    auto fin = std::chrono::steady_clock::now();
+    double duree = std::chrono::duration<double>(fin-debut).count();
+    
+    if(duree > 0.3){
+        std::cout<<"taille() inefficace: "<<duree<<" secondes"<<std::endl;
+        return false;
+    }
+    return true;
+}
+bool testE_egal(){
+    ArbreAVL<int> a,b;
+    const int n = 150000;
+    for(int i=0;i<n;i++){
+        a.inserer(i);
+        b.inserer(i);
+    }
+
+    auto debut = std::chrono::steady_clock::now();
+    bool egal = (a==b);
+    auto fin = std::chrono::steady_clock::now();
+    double duree = std::chrono::duration<double>(fin-debut).count();
+
+    if(!egal){
+        std::cout<<"Egal logique mauvais"<<std::endl;
+        return false;
+    }
+    if(duree > 0.3){
+        std::cout<<"== inefficace: "<<duree<<" secondes"<<std::endl;
+        return false;
+    }
+    return true;
+}
+bool testE_plusEgal(){
+    ArbreAVL<int> a,b;
+    const int n = 150000;
+    for(int i=0;i<n;i++){
+        a.inserer(2*i);
+        b.inserer(2*i+1);
+    }
+
+    auto debut = std::chrono::steady_clock::now();
+    a += b;
+    auto fin = std::chrono::steady_clock::now();
+    double duree = std::chrono::duration<double>(fin-debut).count();
+
+    if(duree > 0.3){
+        std::cout<<"+= inefficace: "<<duree<<" secondes"<<std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool testE_plus(){
+    ArbreAVL<int> a,b;
+    const int n = 150000;
+    for(int i=0;i<n;i++){
+        a.inserer(i);
+        b.inserer(i+n);
+    }
+
+    auto debut = std::chrono::steady_clock::now();
+    ArbreAVL<int> c = a + b;
+    auto fin = std::chrono::steady_clock::now();
+    double duree = std::chrono::duration<double>(fin-debut).count();
+
+    if(duree > 0.3){
+        std::cout<<"+ inefficace: "<<duree<<" secondes"<<std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool testE_moinsEgal(){
+    ArbreAVL<int> a,b;
+    const int n = 150000;
+    for(int i=0;i<n;i++){
+        a.inserer(i);
+        b.inserer(i+n);
+    }
+    a += b;
+    b += a;
+
+    auto debut = std::chrono::steady_clock::now();
+    a -= b;
+    auto fin = std::chrono::steady_clock::now();
+    double duree = std::chrono::duration<double>(fin-debut).count();
+
+    if(duree > 0.3){
+        std::cout<<"-= inefficace: "<<duree<<" secondes"<<std::endl;
+        return false;
+    }
+    return true;
+}
 
 int main(){
     test00_compilation();
@@ -195,11 +297,11 @@ int main(){
     if(!test08_ops_identique()) nb_types_erreur++;
     if(!test09_copie()) nb_types_erreur++;
 
-    // if(!testE_taille()) nb_types_erreur++;
-    // if(!testE_egal()) nb_types_erreur++;
-    // if(!testE_plusEgal()) nb_types_erreur++;
-    // if(!testE_plus()) nb_types_erreur++;
-    // if(!testE_moinsEgal()) nb_types_erreur++;
+    if(!testE_taille()) nb_types_erreur++;
+    if(!testE_egal()) nb_types_erreur++;
+    if(!testE_plusEgal()) nb_types_erreur++;
+    if(!testE_plus()) nb_types_erreur++;
+    if(!testE_moinsEgal()) nb_types_erreur++;
     return nb_types_erreur;
 }
 

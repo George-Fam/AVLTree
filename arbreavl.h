@@ -67,8 +67,8 @@ private:
         Noeud *gauche;
         Noeud *droite;
     };
-    int nbElements;
     Noeud* racine;
+    int nbElements;
     // ----------------------------------------------------------------
  
     // --------------------- Insertion & Rotations --------------------

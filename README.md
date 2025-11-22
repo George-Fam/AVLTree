@@ -37,11 +37,10 @@ The tree tracks its size incrementally.
 Implements `operator*`, `operator++`, comparisons, and boolean conversion.
 
 ## Build & Run
-Compile and run the test suite:
+Compile and run the test suite with make:
 
 ```bash
-g++ -std=c++11 testtp3.cpp -O2 -o test
-./test
+make run
 ```
 
 ## Implementation Highlights
